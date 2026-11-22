@@ -1,0 +1,183 @@
+/* Shared stylesheet: change the colours below and the whole site updates */
+:root {
+  --bg: #f4f7f6;
+  --ink: #1f2933;
+  --brand: #0f766e;
+  --brand2: #134e4a;
+  --card: #ffffff;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.6;
+}
+header { background: var(--brand2); color: #fff; padding: 1rem 1.5rem; }
+header h1 { margin: 0 0 .5rem; }
+nav a { color: #fff; margin-right: 1rem; text-decoration: none; font-weight: 700; display: inline-block; }
+nav a:hover, nav a.active { text-decoration: underline; }
+a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible { outline: 3px solid #f59e0b; outline-offset: 2px; }
+main { max-width: 900px; margin: auto; padding: 1rem; }
+img { max-width: 100%; height: auto; border-radius: 12px; }
+.card { background: var(--card); padding: 1.2rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,.12); margin: 1rem 0; }
+.card:hover { transform: translateY(-4px); transition: .2s; }
+.hero { display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap; }
+.profile-pic { width: 200px; height: 200px; object-fit: cover; border-radius: 50%; border: 5px solid var(--brand); }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
+.btn { display: inline-block; background: var(--brand); color: #fff; padding: .6rem 1.2rem; border-radius: 999px; text-decoration: none; font-weight: 700; border: 0; font-size: 1rem; cursor: pointer; }
+.btn:hover { background: var(--brand2); }
+.links { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: .6rem; }
+.table-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; }
+th, td { border: 1px solid #cbd5d1; padding: .5rem .7rem; text-align: left; }
+th { background: #e6f2f0; }
+input, textarea { width: 100%; padding: .5rem; font: inherit; border: 1px solid #9aa8a4; border-radius: 8px; }
+footer { text-align: center; padding: 1.5rem; font-size: .9rem; }
+
+/* Bonus: dark mode follows the device setting */
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #0f1716; --ink: #e5eceb; --card: #1a2625; --brand: #14b8a6; --brand2: #0b2f2c; }
+  .btn { color: #04201d; }
+  .btn:hover { background: #5eead4; }
+  th { background: #243533; }
+  th, td { border-color: #3a4d4a; }
+  input, textarea { background: #0f1716; color: var(--ink); border-color: #4a5f5b; }
+}
+
+/* ---------- Header and menu button ---------- */
+header { display: flex; align-items: center; gap: 1rem; }
+header h1 { margin: 0; }
+#menu-toggle {
+  background: transparent; color: #fff; border: 2px solid #fff;
+  border-radius: 8px; font-size: 1.4rem; line-height: 1;
+  padding: .3rem .6rem; cursor: pointer;
+}
+#menu-toggle:hover { background: rgba(255,255,255,.15); }
+
+/* ---------- Collapsible side panel ---------- */
+#sidebar {
+  position: fixed; top: 0; left: 0; bottom: 0; width: 260px;
+  background: var(--brand2); padding: 5rem 1rem 1rem;
+  transform: translateX(-100%); transition: transform .3s ease;
+  z-index: 900; overflow-y: auto;
+}
+#sidebar.open { transform: translateX(0); }
+#sidebar nav a {
+  display: block; margin: 0 0 .4rem; padding: .7rem 1rem;
+  border-radius: 10px; color: #fff; text-decoration: none; font-weight: 700;
+}
+#sidebar nav a:hover { background: rgba(255,255,255,.15); }
+#sidebar nav a.active { background: var(--brand); text-decoration: none; }
+#scrim {
+  position: fixed; inset: 0; background: rgba(0,0,0,.35);
+  opacity: 0; visibility: hidden; transition: opacity .3s; z-index: 800;
+}
+#scrim.show { opacity: 1; visibility: visible; }
+/* keep the menu button above the panel so it can close it */
+header { position: relative; z-index: 950; }
+
+/* ---------- Loading animation with blurred background ---------- */
+#loader {
+  position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
+  background: rgba(255,255,255,.25);
+  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+  opacity: 0; visibility: hidden; transition: opacity .2s; z-index: 1000;
+}
+#loader.show { opacity: 1; visibility: visible; }
+.dots { position: relative; width: 64px; height: 64px; animation: spin 1s linear infinite; }
+.dots span {
+  position: absolute; width: 16px; height: 16px; border-radius: 50%;
+  animation: dotcolors 2s linear infinite;
+}
+.dots span:nth-child(1) { top: 0;    left: 24px; }
+.dots span:nth-child(2) { top: 24px; right: 0;   animation-delay: -.5s; }
+.dots span:nth-child(3) { bottom: 0; left: 24px; animation-delay: -1s; }
+.dots span:nth-child(4) { top: 24px; left: 0;    animation-delay: -1.5s; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes dotcolors {
+  0%   { background: #e63946; }
+  25%  { background: #f59e0b; }
+  50%  { background: #14b8a6; }
+  75%  { background: #1d4ed8; }
+  100% { background: #e63946; }
+}
+@media (prefers-color-scheme: dark) {
+  #loader { background: rgba(0,0,0,.35); }
+}
+
+/* ---------- Page fade-in ---------- */
+body { animation: pagein .6s ease both; }
+@keyframes pagein { from { opacity: 0; } to { opacity: 1; } }
+
+/* ---------- Scroll reveal ---------- */
+.reveal { opacity: 0; transform: translateY(30px); transition: opacity .6s ease, transform .6s ease; }
+.reveal.visible { opacity: 1; transform: none; }
+/* keep the card hover lift working after the reveal */
+.card.reveal.visible:hover { transform: translateY(-4px); transition: transform .2s; }
+
+/* ---------- Typing effect (home heading) ---------- */
+.caret { display: inline-block; width: 3px; height: 1em; background: currentColor;
+         margin-left: 4px; vertical-align: -0.12em; animation: blink .8s steps(1) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+
+/* ---------- Floating profile photo with pulsing ring ---------- */
+.profile-pic { animation: float 4s ease-in-out infinite, ring 2.5s ease-out infinite; }
+@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+@keyframes ring {
+  0%   { box-shadow: 0 0 0 0 rgba(20,184,166,.55); }
+  100% { box-shadow: 0 0 0 22px rgba(20,184,166,0); }
+}
+
+/* ---------- Image zoom on hover ---------- */
+.card img:not(.profile-pic) { transition: transform .4s ease; }
+.card:hover img:not(.profile-pic) { transform: scale(1.03); }
+
+/* ---------- Button ripple ---------- */
+.btn { position: relative; overflow: hidden; transition: background .2s, transform .15s; }
+.btn:active { transform: scale(.96); }
+.ripple { position: absolute; border-radius: 50%; background: rgba(255,255,255,.55);
+          transform: scale(0); animation: ripple .6s ease-out; pointer-events: none; }
+@keyframes ripple { to { transform: scale(4); opacity: 0; } }
+
+/* ---------- Scroll progress bar ---------- */
+#progress { position: fixed; top: 0; left: 0; height: 4px; width: 0;
+            background: linear-gradient(90deg, #14b8a6, #f59e0b, #e63946); z-index: 1200; }
+
+/* ---------- Back-to-top button ---------- */
+#to-top { position: fixed; right: 1.2rem; bottom: 1.2rem; width: 46px; height: 46px;
+          border-radius: 50%; border: 0; background: var(--brand); color: #fff;
+          font-size: 1.3rem; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,.25);
+          opacity: 0; visibility: hidden; transform: translateY(20px);
+          transition: opacity .3s, transform .3s, visibility .3s; z-index: 700; }
+#to-top.show { opacity: 1; visibility: visible; transform: none; }
+#to-top:hover { transform: translateY(-3px); }
+
+/* ---------- Menu links slide in when the panel opens ---------- */
+#sidebar nav a { opacity: 0; transform: translateX(-20px); transition: opacity .3s, transform .3s, background .2s; }
+#sidebar.open nav a { opacity: 1; transform: none; }
+#sidebar.open nav a:nth-child(1) { transition-delay: .10s; }
+#sidebar.open nav a:nth-child(2) { transition-delay: .17s; }
+#sidebar.open nav a:nth-child(3) { transition-delay: .24s; }
+#sidebar.open nav a:nth-child(4) { transition-delay: .31s; }
+#sidebar.open nav a:nth-child(5) { transition-delay: .38s; }
+
+/* ---------- Respect people who turn animations off ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .reveal { opacity: 1; transform: none; }
+}
+
+/* ---------- Animated skill bars ---------- */
+.skill { margin: 1rem 0; }
+.skill-top { display: flex; justify-content: space-between; font-weight: 700; margin-bottom: .3rem; }
+.skill-track { height: 14px; background: #dbe7e4; border-radius: 999px; overflow: hidden; }
+.skill-fill {
+  height: 100%; width: 0; border-radius: 999px;
+  background: linear-gradient(90deg, #14b8a6, #1d4ed8);
+  transition: width 1.4s cubic-bezier(.22, 1, .36, 1);
+}
+@media (prefers-color-scheme: dark) {
+  .skill-track { background: #2a3a38; }
+}
